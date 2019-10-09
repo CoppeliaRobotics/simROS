@@ -5,7 +5,7 @@ Compile with your C++ project.
 Example plugin (uses also [v_repStubsGen](https://github.com/CoppeliaRobotics/v_repStubsGen)):
 
 ```
-#include "v_repExtPluginSkeletonNG.h"
+#include "simExtPluginSkeletonNG.h"
 #include "v_repPlusPlus/Plugin.h"
 #include "stubs.h"
 
@@ -27,4 +27,4 @@ public:
 VREP_PLUGIN("PluginSkeletonNG", 1, Plugin)
 ```
 
-See [v_repExtPluginSkeletonNG](https://github.com/CoppeliaRobotics/v_repExtPluginSkeletonNG) for a complete example.
+See [simExtPluginSkeletonNG](https://github.com/CoppeliaRobotics/simExtPluginSkeletonNG) for a complete example.

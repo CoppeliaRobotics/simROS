@@ -68,16 +68,16 @@ set(SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_srv_io.cpp
 )
-add_library(v_repExtRosInterface ${SOURCES})
-add_dependencies(v_repExtRosInterface generate_ros_code)
-target_link_libraries(v_repExtRosInterface
+add_library(simExtRosInterface ${SOURCES})
+add_dependencies(simExtRosInterface generate_ros_code)
+target_link_libraries(simExtRosInterface
     ${catkin_LIBRARIES}
     ${VREP_LIBRARIES})
 
 ## This will produce the library directly in vrep root folder. The default folder
-## for the libv_repExtRosInterface.so file will not be devel/lib anymore.
-#set_target_properties(v_repExtRosInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${VREP_ROOT})
+## for the libsimExtRosInterface.so file will not be devel/lib anymore.
+#set_target_properties(simExtRosInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${VREP_ROOT})
 
 ## install the library to VREP_ROOT folder
 ## this command will install the generated library to the vrep root folder no matter where the library is generated.
-#install(TARGETS v_repExtRosInterface DESTINATION ${VREP_ROOT})
+#install(TARGETS simExtRosInterface DESTINATION ${VREP_ROOT})

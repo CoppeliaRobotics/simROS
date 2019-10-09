@@ -145,5 +145,5 @@ It will generate an enum named `myenum` with items `sim_plugname_foo_alpha`, `si
 
 ## Complete example
 
-See [v_repExtPluginSkeletonNG](https://github.com/CoppeliaRobotics/v_repExtPluginSkeletonNG) for an example of a V-REP plugin using this framework.
+See [simExtPluginSkeletonNG](https://github.com/CoppeliaRobotics/simExtPluginSkeletonNG) for an example of a V-REP plugin using this framework.
 

@@ -6,13 +6,13 @@
 #include <vector>
 #include <stdexcept>
 
-#include "v_repLib.h"
+#include "simLib.h"
 
 #ifdef _WIN32
-	#define VREP_DLLEXPORT extern "C" __declspec(dllexport)
+	#define SIM_DLLEXPORT extern "C" __declspec(dllexport)
 #endif /* _WIN32 */
 #if defined (__linux) || defined (__APPLE__)
-	#define VREP_DLLEXPORT extern "C"
+	#define SIM_DLLEXPORT extern "C"
 #endif /* __linux || __APPLE__ */
 
 #ifdef _WIN32
@@ -36,7 +36,7 @@ namespace vrep
         virtual void onStart();
         virtual void onEnd();
         virtual void * onMessage(int message, int *auxData, void *customData, int *replyData);
-        virtual LIBRARY loadVrepLibrary();
+        virtual LIBRARY loadSimLibrary();
 
         virtual void onInstancePass(bool objectsErased, bool objectsCreated, bool modelLoaded, bool sceneLoaded, bool undoCalled, bool redoCalled, bool sceneSwitched, bool editModeActive, bool objectsScaled, bool selectionStateChanged, bool keyPressed, bool simulationStarted, bool simulationEnded, bool scriptCreated, bool scriptErased);
         virtual void onInstanceSwitch(int sceneID);
@@ -87,13 +87,13 @@ namespace vrep
 }
 
 #define VREP_PLUGIN(pluginName, pluginVersion, className) \
-LIBRARY vrepLib; \
+LIBRARY simLib; \
 className vrepPlugin; \
-VREP_DLLEXPORT unsigned char v_repStart(void *reservedPointer, int reservedInt) \
+SIM_DLLEXPORT unsigned char simStart(void *reservedPointer, int reservedInt) \
 { \
     try \
     { \
-        vrepLib = vrepPlugin.loadVrepLibrary(); \
+        simLib = vrepPlugin.loadSimLibrary(); \
         vrepPlugin.onStart(); \
         return pluginVersion; \
     } \
@@ -103,12 +103,12 @@ VREP_DLLEXPORT unsigned char v_repStart(void *reservedPointer, int reservedInt) 
         return 0; \
     } \
 } \
-VREP_DLLEXPORT void v_repEnd() \
+SIM_DLLEXPORT void simEnd() \
 { \
     vrepPlugin.onEnd(); \
-    unloadVrepLibrary(vrepLib); \
+    unloadSimLibrary(simLib); \
 } \
-VREP_DLLEXPORT void * v_repMessage(int message, int *auxiliaryData, void *customData, int *replyData) \
+SIM_DLLEXPORT void * simMessage(int message, int *auxiliaryData, void *customData, int *replyData) \
 { \
     return vrepPlugin.onMessage(message, auxiliaryData, customData, replyData); \
 }

@@ -560,7 +560,7 @@ namespace vrep
         return retVal;
     }
 
-    LIBRARY Plugin::loadVrepLibrary()
+    LIBRARY Plugin::loadSimLibrary()
     {
         LIBRARY lib = NULL;
 	char curDirAndFile[1024];
@@ -577,20 +577,20 @@ namespace vrep
 	std::string currentDirAndPath(curDirAndFile);
 	std::string temp(currentDirAndPath);
 #ifdef _WIN32
-	temp += "\\v_rep.dll";
+	temp += "\\coppeliaSim.dll";
 #elif defined (__linux)
-	temp += "/libv_rep.so";
+	temp += "/libcoppeliaSim.so";
 #elif defined (__APPLE__)
-	temp += "/libv_rep.dylib";
+	temp += "/libcoppeliaSim.dylib";
 #endif
-	lib = ::loadVrepLibrary(temp.c_str());
+	lib = ::loadSimLibrary(temp.c_str());
 	if(lib == NULL)
         {
             throw std::runtime_error("could not find or correctly load the V-REP library");
         }
-	if(::getVrepProcAddresses(lib)==0)
+	if(::getSimProcAddresses(lib)==0)
 	{
-	    ::unloadVrepLibrary(lib);
+	    ::unloadSimLibrary(lib);
 	    throw std::runtime_error("could not find all required functions in the V-REP library");
 	}
         return lib;
