@@ -1,8 +1,8 @@
-#ifndef VREP_ROS_PLUGIN__ROS_MSG_IO__H
-#define VREP_ROS_PLUGIN__ROS_MSG_IO__H
+#ifndef SIM_ROS_PLUGIN__ROS_MSG_IO__H
+#define SIM_ROS_PLUGIN__ROS_MSG_IO__H
 
 #include <ros_msg_builtin_io.h>
-#include <vrep_ros_interface.h>
+#include <sim_ros_interface.h>
 
 #py from parse_messages_and_services import get_msgs_info, get_srvs_info, get_msgs_srvs_info
 #py msgs = get_msgs_info(pycpp.params['messages_file'])
@@ -23,4 +23,4 @@ void read__`info.typespec.normalized()`(int stack, `info.typespec.ctype()` *msg,
 void ros_callback__`info.typespec.normalized()`(const boost::shared_ptr<`info.typespec.ctype()` const>& msg, SubscriberProxy *proxy);
 #py endfor
 
-#endif // VREP_ROS_PLUGIN__ROS_MSG_IO__H
+#endif // SIM_ROS_PLUGIN__ROS_MSG_IO__H

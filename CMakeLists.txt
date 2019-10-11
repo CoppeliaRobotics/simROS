@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(vrep_ros_interface)
+project(sim_ros_interface)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
@@ -33,7 +33,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/CoppeliaRobotics-modules)
-find_package(VREP 3.6.1.2 REQUIRED)
+find_package(CoppeliaSim 3.6.1.2 REQUIRED)
 
 catkin_package(CATKIN_DEPENDS ${PKG_DEPS})
 
@@ -45,26 +45,26 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated)
 include_directories(${catkin_INCLUDE_DIRS})
-include_directories(${VREP_INCLUDE})
-include_directories(${VREP_COMMON})
+include_directories(${COPPELIASIM_INCLUDE_DIR})
+include_directories(${COPPELIASIM_COMMON_DIR})
 
 set(generatedFiles)
 file(GLOB templateFiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/templates/ ${CMAKE_CURRENT_SOURCE_DIR}/templates/*)
 foreach(templateFile ${templateFiles})
-    add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/external/v_repStubsGen/external/pycpp/pycpp.py" -p "messages_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" -p "services_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" -i "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}" -o "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" -P "${CMAKE_CURRENT_SOURCE_DIR}/tools" DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" "${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}")
+    add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/external/simStubsGen/external/pycpp/pycpp.py" -p "messages_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" -p "services_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" -i "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}" -o "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" -P "${CMAKE_CURRENT_SOURCE_DIR}/tools" DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" "${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}")
     set(generatedFiles ${generatedFiles} "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}")
 endforeach()
 add_custom_target(generate_ros_code DEPENDS ${generatedFiles})
-vrep_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/meta/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simExtRosInterface.lua)
+coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/meta/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simExtRosInterface.lua)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 
 set(SOURCES
-    src/vrep_ros_interface.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/v_repPlusPlus/Plugin.cpp
+    src/sim_ros_interface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/simPlusPlus/Plugin.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/stubs.cpp
     src/ros_msg_builtin_io.cpp
-    ${VREP_EXPORTED_SOURCES}
+    ${COPPELIASIM_EXPORTED_SOURCES}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_srv_io.cpp
 )
@@ -72,12 +72,12 @@ add_library(simExtRosInterface ${SOURCES})
 add_dependencies(simExtRosInterface generate_ros_code)
 target_link_libraries(simExtRosInterface
     ${catkin_LIBRARIES}
-    ${VREP_LIBRARIES})
+    ${COPPELIASIM_LIBRARIES})
 
-## This will produce the library directly in vrep root folder. The default folder
+## This will produce the library directly in CoppeliaSim root folder. The default folder
 ## for the libsimExtRosInterface.so file will not be devel/lib anymore.
-#set_target_properties(simExtRosInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${VREP_ROOT})
+#set_target_properties(simExtRosInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${COPPELIASIM_ROOT_DIR})
 
-## install the library to VREP_ROOT folder
-## this command will install the generated library to the vrep root folder no matter where the library is generated.
-#install(TARGETS simExtRosInterface DESTINATION ${VREP_ROOT})
+## install the library to COPPELIASIM_ROOT_DIR folder
+## this command will install the generated library to the CoppeliaSim root folder no matter where the library is generated.
+#install(TARGETS simExtRosInterface DESTINATION ${COPPELIASIM_ROOT_DIR})

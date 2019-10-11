@@ -1,5 +1,5 @@
-#ifndef VREP_ROS_PLUGIN__ROS_MSG_BUILTIN_IO__H
-#define VREP_ROS_PLUGIN__ROS_MSG_BUILTIN_IO__H
+#ifndef SIM_ROS_PLUGIN__ROS_MSG_BUILTIN_IO__H
+#define SIM_ROS_PLUGIN__ROS_MSG_BUILTIN_IO__H
 
 #include <ros/ros.h>
 
@@ -44,4 +44,4 @@ void write__string(std::string value, int stack, const WriteOptions *opt = NULL)
 void write__time(ros::Time value, int stack, const WriteOptions *opt = NULL);
 void write__duration(ros::Duration value, int stack, const WriteOptions *opt = NULL);
 
-#endif // VREP_ROS_PLUGIN__ROS_MSG_BUILTIN_IO__H
+#endif // SIM_ROS_PLUGIN__ROS_MSG_BUILTIN_IO__H

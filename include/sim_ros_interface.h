@@ -1,5 +1,5 @@
-#ifndef VREP_ROS_INTERFACE_H_INCLUDED
-#define VREP_ROS_INTERFACE_H_INCLUDED
+#ifndef SIM_ROS_INTERFACE_H_INCLUDED
+#define SIM_ROS_INTERFACE_H_INCLUDED
 
 #include <iostream>
 #include <sstream>
@@ -76,4 +76,4 @@ struct ServiceServerProxy : Proxy
 #include <ros_msg_io.h>
 #include <ros_srv_io.h>
 
-#endif // VREP_ROS_INTERFACE_H_INCLUDED
+#endif // SIM_ROS_INTERFACE_H_INCLUDED
