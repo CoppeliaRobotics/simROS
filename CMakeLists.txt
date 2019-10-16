@@ -32,7 +32,7 @@ find_package(catkin REQUIRED COMPONENTS ${PKG_DEPS})
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/CoppeliaRobotics-modules)
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/libPlugin/cmake)
 find_package(CoppeliaSim 3.6.1.2 REQUIRED)
 
 catkin_package(CATKIN_DEPENDS ${PKG_DEPS})
@@ -51,7 +51,7 @@ include_directories(${COPPELIASIM_COMMON_DIR})
 set(generatedFiles)
 file(GLOB templateFiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/templates/ ${CMAKE_CURRENT_SOURCE_DIR}/templates/*)
 foreach(templateFile ${templateFiles})
-    add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/external/simStubsGen/external/pycpp/pycpp.py" -p "messages_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" -p "services_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" -i "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}" -o "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" -P "${CMAKE_CURRENT_SOURCE_DIR}/tools" DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" "${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}")
+    add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/external/libPlugin/simStubsGen/external/pycpp/pycpp.py" -p "messages_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" -p "services_file=${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" -i "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}" -o "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}" -P "${CMAKE_CURRENT_SOURCE_DIR}/tools" DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/meta/messages.txt" "${CMAKE_CURRENT_SOURCE_DIR}/meta/services.txt" "${CMAKE_CURRENT_SOURCE_DIR}/templates/${templateFile}")
     set(generatedFiles ${generatedFiles} "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}")
 endforeach()
 add_custom_target(generate_ros_code DEPENDS ${generatedFiles})
@@ -61,8 +61,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in ${CMAKE_CURRENT_B
 
 set(SOURCES
     src/sim_ros_interface.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/simPlusPlus/Plugin.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/generated/stubs.cpp
     src/ros_msg_builtin_io.cpp
     ${COPPELIASIM_EXPORTED_SOURCES}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
