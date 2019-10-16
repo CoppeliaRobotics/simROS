@@ -55,7 +55,7 @@ foreach(templateFile ${templateFiles})
     set(generatedFiles ${generatedFiles} "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}")
 endforeach()
 add_custom_target(generate_ros_code DEPENDS ${generatedFiles})
-coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/meta/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simExtRosInterface.lua)
+coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/meta/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simExtROSInterface.lua)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 
@@ -66,16 +66,16 @@ set(SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_srv_io.cpp
 )
-add_library(simExtRosInterface ${SOURCES})
-add_dependencies(simExtRosInterface generate_ros_code)
-target_link_libraries(simExtRosInterface
+add_library(simExtROSInterface ${SOURCES})
+add_dependencies(simExtROSInterface generate_ros_code)
+target_link_libraries(simExtROSInterface
     ${catkin_LIBRARIES}
     ${COPPELIASIM_LIBRARIES})
 
 ## This will produce the library directly in CoppeliaSim root folder. The default folder
-## for the libsimExtRosInterface.so file will not be devel/lib anymore.
-#set_target_properties(simExtRosInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${COPPELIASIM_ROOT_DIR})
+## for the libsimExtROSInterface.so file will not be devel/lib anymore.
+#set_target_properties(simExtROSInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${COPPELIASIM_ROOT_DIR})
 
 ## install the library to COPPELIASIM_ROOT_DIR folder
 ## this command will install the generated library to the CoppeliaSim root folder no matter where the library is generated.
-#install(TARGETS simExtRosInterface DESTINATION ${COPPELIASIM_ROOT_DIR})
+#install(TARGETS simExtROSInterface DESTINATION ${COPPELIASIM_ROOT_DIR})
