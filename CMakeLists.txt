@@ -29,10 +29,13 @@ set(PKG_DEPS
 
 find_package(catkin REQUIRED COMPONENTS ${PKG_DEPS})
 
+if(NOT LIBPLUGIN_DIR)
+    set(LIBPLUGIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../libPlugin)
+endif()
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/libPlugin/cmake)
+    ${LIBPLUGIN_DIR}/cmake)
 find_package(CoppeliaSim 3.6.1.2 REQUIRED)
 
 catkin_package(CATKIN_DEPENDS ${PKG_DEPS})
