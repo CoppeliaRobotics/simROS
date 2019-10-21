@@ -36,7 +36,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
     ${LIBPLUGIN_DIR}/cmake)
-find_package(CoppeliaSim 3.6.1.2 REQUIRED)
+find_package(CoppeliaSim 4.0.0.0 REQUIRED)
 
 catkin_package(CATKIN_DEPENDS ${PKG_DEPS})
 
