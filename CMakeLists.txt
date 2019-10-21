@@ -30,7 +30,11 @@ set(PKG_DEPS
 find_package(catkin REQUIRED COMPONENTS ${PKG_DEPS})
 
 if(NOT LIBPLUGIN_DIR)
-    set(LIBPLUGIN_DIR $ENV{COPPELIASIM_ROOT_DIR}/programming/libPlugin)
+    if(ENV{COPPELIASIM_ROOT_DIR})
+        set(LIBPLUGIN_DIR $ENV{COPPELIASIM_ROOT_DIR}/programming/libPlugin)
+    else()
+        message(FATAL_ERROR "Environment variable COPPELIASIM_ROOT_DIR is not set")
+    endif()
 endif()
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
