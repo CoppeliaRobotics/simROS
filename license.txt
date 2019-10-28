@@ -5,10 +5,15 @@ copying, etc.) contained in the same directory if it is present, or
 under the same terms of the files in the parent directory otherwise.
 
 -----------------------------------------------------------------------
-BSD License 2.0
+simExtROSInterface, based on v_repExtRosInterface from Coppelia Robotics GmbH
+on September 2019
 
-Copyright (c) 2018-2019, Coppelia Robotics GmbH
+Copyright (C) 2016-2020 Coppelia Robotics GmbH / Marc Freese
+Copyright (C) 2017-2019 OnRobot A/S
+
 All rights reserved.
+
+BSD License 2.0
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
