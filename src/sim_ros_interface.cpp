@@ -507,7 +507,11 @@ void searchParam(SScriptCallBack *p, const char *cmd, searchParam_in *in, search
 bool initialize()
 {
     int argc = 0;
+#if _MSC_VER
+    char **argv = nullptr;
+#else
     char *argv[] = {};
+#endif
 
     int node_name_length = 0;
     char *node_name = nullptr;
