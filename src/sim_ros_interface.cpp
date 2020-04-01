@@ -516,7 +516,7 @@ bool initialize()
     int node_name_length = 0;
     char *node_name = nullptr;
 #if SIM_PROGRAM_FULL_VERSION_NB >= 3060104 // 3.6.1.rev4
-    node_name = simGetStringNamedParam("RosInterface.nodeName", &node_name_length);
+    node_name = simGetStringNamedParam("ROSInterface.nodeName", &node_name_length);
 #endif
 
     ros::init(argc, argv, node_name && node_name_length ? node_name : "sim_ros_interface");
