@@ -78,10 +78,5 @@ target_link_libraries(simExtROSInterface
     ${catkin_LIBRARIES}
     ${COPPELIASIM_LIBRARIES})
 
-## This will produce the library directly in CoppeliaSim root folder. The default folder
-## for the libsimExtROSInterface.so file will not be devel/lib anymore.
-#set_target_properties(simExtROSInterface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${COPPELIASIM_ROOT_DIR})
+install(TARGETS simExtROSInterface DESTINATION ${COPPELIASIM_PLUGINS_DIR})
 
-## install the library to COPPELIASIM_ROOT_DIR folder
-## this command will install the generated library to the CoppeliaSim root folder no matter where the library is generated.
-#install(TARGETS simExtROSInterface DESTINATION ${COPPELIASIM_ROOT_DIR})
