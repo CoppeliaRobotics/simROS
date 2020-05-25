@@ -16,13 +16,11 @@ set(PKG_DEPS
     geometry_msgs
     map_msgs
     nav_msgs
-    pcl_msgs
     sensor_msgs
     shape_msgs
     std_msgs
     tf2_geometry_msgs
     tf2_msgs
-    tf2_sensor_msgs
     trajectory_msgs
     visualization_msgs)
 
