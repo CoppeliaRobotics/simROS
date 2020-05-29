@@ -38,7 +38,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
     ${LIBPLUGIN_DIR}/cmake)
 find_package(CoppeliaSim 4.0.0.0 REQUIRED)
-find_package(Python3 COMPONENTS Interpreter)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 catkin_package(CATKIN_DEPENDS ${PKG_DEPS})
 
