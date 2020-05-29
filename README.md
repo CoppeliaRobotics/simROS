@@ -15,7 +15,4 @@ $ git clone --recursive https://github.com/CoppeliaRobotics/simExtROSInterface.g
 $ catkin build
 ```
 
-Notes for building on Ubuntu 18.04 / ROS Melodic:
-
- - install cmake 3.16 using Kitware's apt repository
- - pass option `--cmake-args -DPython3_EXECUTABLE=/usr/bin/python2 --` to `catkin build`
+For ROS melodic / Ubuntu 18, use the 'melodic' branch
