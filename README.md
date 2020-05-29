@@ -14,3 +14,7 @@ $ git clone --recursive https://github.com/CoppeliaRobotics/simExtROSInterface.g
 ```
 $ catkin build
 ```
+
+Notes for building on Ubuntu 18.04:
+
+  - install cmake 3.16 using Kitware's apt repository
