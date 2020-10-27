@@ -87,6 +87,18 @@ void subscribe(SScriptCallBack * p, const char * cmd, subscribe_in * in, subscri
     subscriberProxy->topicCallback.name = in->topicCallback;
     subscriberProxies[subscriberProxy->handle] = subscriberProxy;
 
+    ros::TransportHints th;
+    th.tcpNoDelay(in->transportHints.tcpNoDelay);
+    th.maxDatagramSize(in->transportHints.maxDatagramSize);
+    for(const auto &t : in->transportHints.transports)
+    {
+        if(t == "reliable") th.reliable();
+        else if(t == "unreliable") th.unreliable();
+        else if(t == "tcp") th.tcp();
+        else if(t == "udp") th.udp();
+        else throw sim::exception("invalid transport: '%s'", t);
+    }
+
     if(0) {}
 #include <sub.cpp>
     else
