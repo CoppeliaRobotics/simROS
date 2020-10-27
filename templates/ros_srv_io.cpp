@@ -12,21 +12,21 @@ bool ros_srv_callback__`info.typespec.normalized()`(`info.typespec.ctype()`::Req
 
     try
     {
-        stack = simCreateStackE();
+        stack = sim::createStack();
         write__`info.typespec.normalized()`Request(req, stack, &(proxy->wr_opt));
-        simCallScriptFunctionExE(proxy->serviceCallback.scriptId, proxy->serviceCallback.name.c_str(), stack);
+        sim::callScriptFunctionEx(proxy->serviceCallback.scriptId, proxy->serviceCallback.name.c_str(), stack);
         read__`info.typespec.normalized()`Response(stack, &res, &(proxy->rd_opt));
-        simReleaseStackE(stack);
+        sim::releaseStack(stack);
         stack = -1;
         return true;
     }
-    catch(exception& ex)
+    catch(std::exception &ex)
     {
         if(stack != -1)
             simReleaseStack(stack); // don't throw
         std::string msg = "ros_srv_callback__`info.typespec.normalized()`: ";
         msg += ex.what();
-        simSetLastError(proxy->serviceCallback.name.c_str(), msg.c_str());
+        sim::setLastError(proxy->serviceCallback.name, msg);
         return false;
     }
 }

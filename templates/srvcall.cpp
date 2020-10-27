@@ -11,7 +11,7 @@
         }
         else
         {
-            throw exception("failed to call service `info.typespec.fullname`");
+            throw sim::exception("failed to call service `info.typespec.fullname`");
         }
     }
 #py endfor
