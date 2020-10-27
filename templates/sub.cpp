@@ -3,6 +3,6 @@
 #py for msg, info in msgs.items():
     else if(in->topicType == "`info.typespec.fullname`")
     {
-        subscriberProxy->subscriber = nh->subscribe<`info.typespec.ctype()`>(in->topicName, in->queueSize, boost::bind(ros_callback__`info.typespec.normalized()`, _1, subscriberProxy));
+        subscriberProxy->subscriber = nh->subscribe<`info.typespec.ctype()`>(in->topicName, in->queueSize, boost::bind(ros_callback__`info.typespec.normalized()`, _1, subscriberProxy), ros::VoidConstPtr(), th);
     }
 #py endfor
