@@ -86,12 +86,12 @@ void subscribe(SScriptCallBack * p, const char * cmd, subscribe_in * in, subscri
 #include <sub.cpp>
     else
     {
-        throw exception("unsupported message type. please edit and recompile ROS plugin");
+        throw sim::exception("unsupported message type. please edit and recompile ROS plugin");
     }
 
     if(!subscriberProxy->subscriber)
     {
-        throw exception("failed creation of ROS subscriber");
+        throw sim::exception("failed creation of ROS subscriber");
     }
 
     out->subscriberHandle = subscriberProxy->handle;
@@ -101,7 +101,7 @@ void shutdownSubscriber(SScriptCallBack * p, const char * cmd, shutdownSubscribe
 {
     if(subscriberProxies.find(in->subscriberHandle) == subscriberProxies.end())
     {
-        throw exception("invalid subscriber handle");
+        throw sim::exception("invalid subscriber handle");
     }
 
     SubscriberProxy *subscriberProxy = subscriberProxies[in->subscriberHandle];
@@ -114,7 +114,7 @@ void subscriberTreatUInt8ArrayAsString(SScriptCallBack * p, const char * cmd, su
 {
     if(subscriberProxies.find(in->subscriberHandle) == subscriberProxies.end())
     {
-        throw exception("invalid subscriber handle");
+        throw sim::exception("invalid subscriber handle");
     }
 
     SubscriberProxy *subscriberProxy = subscriberProxies[in->subscriberHandle];
@@ -134,12 +134,12 @@ void advertise(SScriptCallBack * p, const char * cmd, advertise_in * in, adverti
 #include <adv.cpp>
     else
     {
-        throw exception("unsupported message type. please edit and recompile ROS plugin");
+        throw sim::exception("unsupported message type. please edit and recompile ROS plugin");
     }
 
     if(!publisherProxy->publisher)
     {
-        throw exception("failed creation of ROS publisher");
+        throw sim::exception("failed creation of ROS publisher");
     }
 
     out->publisherHandle = publisherProxy->handle;
@@ -149,7 +149,7 @@ void shutdownPublisher(SScriptCallBack * p, const char * cmd, shutdownPublisher_
 {
     if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
     {
-        throw exception("invalid publisher handle");
+        throw sim::exception("invalid publisher handle");
     }
 
     PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
@@ -162,7 +162,7 @@ void publisherTreatUInt8ArrayAsString(SScriptCallBack * p, const char * cmd, pub
 {
     if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
     {
-        throw exception("invalid publisher handle");
+        throw sim::exception("invalid publisher handle");
     }
 
     PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
@@ -173,7 +173,7 @@ void publish(SScriptCallBack * p, const char * cmd, publish_in * in, publish_out
 {
     if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
     {
-        throw exception("invalid publisher handle");
+        throw sim::exception("invalid publisher handle");
     }
 
     PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
@@ -184,7 +184,7 @@ void publish(SScriptCallBack * p, const char * cmd, publish_in * in, publish_out
 #include <pub.cpp>
     else
     {
-        throw exception("unsupported message type. please edit and recompile ROS plugin");
+        throw sim::exception("unsupported message type. please edit and recompile ROS plugin");
     }
 }
 
@@ -201,12 +201,12 @@ void serviceClient(SScriptCallBack * p, const char * cmd, serviceClient_in * in,
 #include <srvcli.cpp>
     else
     {
-        throw exception("unsupported service type. please edit and recompile ROS plugin");
+        throw sim::exception("unsupported service type. please edit and recompile ROS plugin");
     }
 
     if(!serviceClientProxy->client)
     {
-        throw exception("failed creation of ROS service client");
+        throw sim::exception("failed creation of ROS service client");
     }
 
     out->serviceClientHandle = serviceClientProxy->handle;
@@ -216,7 +216,7 @@ void shutdownServiceClient(SScriptCallBack * p, const char * cmd, shutdownServic
 {
     if(serviceClientProxies.find(in->serviceClientHandle) == serviceClientProxies.end())
     {
-        throw exception("invalid service client handle");
+        throw sim::exception("invalid service client handle");
     }
 
     ServiceClientProxy *serviceClientProxy = serviceClientProxies[in->serviceClientHandle];
@@ -229,7 +229,7 @@ void serviceClientTreatUInt8ArrayAsString(SScriptCallBack * p, const char * cmd,
 {
     if(serviceClientProxies.find(in->serviceClientHandle) == serviceClientProxies.end())
     {
-        throw exception("invalid service client handle");
+        throw sim::exception("invalid service client handle");
     }
 
     ServiceClientProxy *serviceClientProxy = serviceClientProxies[in->serviceClientHandle];
@@ -241,7 +241,7 @@ void call(SScriptCallBack * p, const char * cmd, call_in * in, call_out * out)
 {
     if(serviceClientProxies.find(in->serviceClientHandle) == serviceClientProxies.end())
     {
-        throw exception("invalid service client handle");
+        throw sim::exception("invalid service client handle");
     }
 
     ServiceClientProxy *serviceClientProxy = serviceClientProxies[in->serviceClientHandle];
@@ -252,7 +252,7 @@ void call(SScriptCallBack * p, const char * cmd, call_in * in, call_out * out)
 #include <srvcall.cpp>
     else
     {
-        throw exception("unsupported service type. please edit and recompile ROS plugin");
+        throw sim::exception("unsupported service type. please edit and recompile ROS plugin");
     }
 }
 
@@ -271,12 +271,12 @@ void advertiseService(SScriptCallBack * p, const char * cmd, advertiseService_in
 #include <srvsrv.cpp>
     else
     {
-        throw exception("unsupported service type. please edit and recompile ROS plugin");
+        throw sim::exception("unsupported service type. please edit and recompile ROS plugin");
     }
 
     if(!serviceServerProxy->server)
     {
-        throw exception("failed creation of ROS service server");
+        throw sim::exception("failed creation of ROS service server");
     }
 
     out->serviceServerHandle = serviceServerProxy->handle;
@@ -286,7 +286,7 @@ void shutdownServiceServer(SScriptCallBack * p, const char * cmd, shutdownServic
 {
     if(serviceServerProxies.find(in->serviceServerHandle) == serviceServerProxies.end())
     {
-        throw exception("invalid service server handle");
+        throw sim::exception("invalid service server handle");
     }
 
     ServiceServerProxy *serviceServerProxy = serviceServerProxies[in->serviceServerHandle];
@@ -299,7 +299,7 @@ void serviceServerTreatUInt8ArrayAsString(SScriptCallBack * p, const char * cmd,
 {
     if(serviceServerProxies.find(in->serviceServerHandle) == serviceServerProxies.end())
     {
-        throw exception("invalid service server handle");
+        throw sim::exception("invalid service server handle");
     }
 
     ServiceServerProxy *serviceServerProxy = serviceServerProxies[in->serviceServerHandle];
@@ -318,16 +318,16 @@ void sendTransforms(SScriptCallBack * p, const char * cmd, sendTransforms_in * i
 {
     std::vector<geometry_msgs::TransformStamped> v;
 
-    simMoveStackItemToTopE(p->stackID, 0);
-    int i = simGetStackTableInfoE(p->stackID, 0);
+    sim::moveStackItemToTop(p->stackID, 0);
+    int i = sim::getStackTableInfo(p->stackID, 0);
     if(i < 0)
-        throw exception("error reading input argument 1 (origin): expected array");
-    int oldsz = simGetStackSizeE(p->stackID);
-    simUnfoldStackTableE(p->stackID);
-    int sz = (simGetStackSizeE(p->stackID) - oldsz + 1) / 2;
+        throw sim::exception("error reading input argument 1 (origin): expected array");
+    int oldsz = sim::getStackSize(p->stackID);
+    sim::unfoldStackTable(p->stackID);
+    int sz = (sim::getStackSize(p->stackID) - oldsz + 1) / 2;
     for(int i = 0; i < sz; i++)
     {
-        simMoveStackItemToTopE(p->stackID, oldsz - 1);
+        sim::moveStackItemToTop(p->stackID, oldsz - 1);
         int j;
         read__int(p->stackID, &j);
         simMoveStackItemToTop(p->stackID, oldsz - 1);
@@ -354,7 +354,7 @@ void imageTransportSubscribe(SScriptCallBack *p, const char *cmd, imageTransport
 
     if(!subscriberProxy->imageTransportSubscriber)
     {
-        throw exception("failed creation of ROS ImageTransport subscriber");
+        throw sim::exception("failed creation of ROS ImageTransport subscriber");
     }
 
     out->subscriberHandle = subscriberProxy->handle;
@@ -364,7 +364,7 @@ void imageTransportShutdownSubscriber(SScriptCallBack *p, const char *cmd, image
 {
     if(subscriberProxies.find(in->subscriberHandle) == subscriberProxies.end())
     {
-        throw exception("invalid subscriber handle");
+        throw sim::exception("invalid subscriber handle");
     }
 
     SubscriberProxy *subscriberProxy = subscriberProxies[in->subscriberHandle];
@@ -386,7 +386,7 @@ void imageTransportAdvertise(SScriptCallBack *p, const char *cmd, imageTransport
 
     if(!publisherProxy->imageTransportPublisher)
     {
-        throw exception("failed creation of ROS ImageTransport publisher");
+        throw sim::exception("failed creation of ROS ImageTransport publisher");
     }
 
     out->publisherHandle = publisherProxy->handle;
@@ -396,7 +396,7 @@ void imageTransportShutdownPublisher(SScriptCallBack *p, const char *cmd, imageT
 {
     if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
     {
-        throw exception("invalid publisher handle");
+        throw sim::exception("invalid publisher handle");
     }
 
     PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
@@ -409,7 +409,7 @@ void imageTransportPublish(SScriptCallBack *p, const char *cmd, imageTransportPu
 {
     if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
     {
-        throw exception("invalid publisher handle");
+        throw sim::exception("invalid publisher handle");
     }
 
     PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
