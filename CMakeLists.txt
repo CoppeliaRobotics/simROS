@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(sim_ros_interface)
 
-set(CMAKE_CXX_STANDARD 11)
-
 set(PKG_DEPS
     roscpp
     rosconsole
