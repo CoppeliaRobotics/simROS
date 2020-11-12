@@ -346,7 +346,7 @@ void sendTransforms(SScriptCallBack * p, const char * cmd, sendTransforms_in * i
     {
         sim::moveStackItemToTop(p->stackID, oldsz - 1);
         int j;
-        read__int(p->stackID, &j);
+        read__int32(p->stackID, &j);
         simMoveStackItemToTop(p->stackID, oldsz - 1);
         geometry_msgs::TransformStamped t;
         read__geometry_msgs__TransformStamped(p->stackID, &t);

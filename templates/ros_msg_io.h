@@ -16,8 +16,8 @@
 #py endfor
 
 #py for msg, info in msgssrvs.items():
-void write__`info.typespec.normalized()`(const `info.typespec.ctype()`& msg, int stack, const WriteOptions *opt = NULL);
-void read__`info.typespec.normalized()`(int stack, `info.typespec.ctype()` *msg, const ReadOptions *opt = NULL);
+void write__`info.typespec.normalized()`(const `info.typespec.ctype()`& msg, int stack, const ROSWriteOptions *opt = NULL);
+void read__`info.typespec.normalized()`(int stack, `info.typespec.ctype()` *msg, const ROSReadOptions *opt = NULL);
 #py endfor
 #py for msg, info in msgs.items():
 void ros_callback__`info.typespec.normalized()`(const boost::shared_ptr<`info.typespec.ctype()` const>& msg, SubscriberProxy *proxy);

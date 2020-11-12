@@ -6,7 +6,7 @@
 #py from parse_messages_and_services import get_msgs_info, get_msgs_srvs_info, TypeSpec
 #py msgs = get_msgs_srvs_info(pycpp.params['messages_file'], pycpp.params['services_file'])
 #py for msg, info in msgs.items():
-void write__`info.typespec.normalized()`(const `info.typespec.ctype()`& msg, int stack, const WriteOptions *opt)
+void write__`info.typespec.normalized()`(const `info.typespec.ctype()`& msg, int stack, const ROSWriteOptions *opt)
 {
     try
     {
@@ -90,7 +90,7 @@ void write__`info.typespec.normalized()`(const `info.typespec.ctype()`& msg, int
     }
 }
 
-void read__`info.typespec.normalized()`(int stack, `info.typespec.ctype()` *msg, const ReadOptions *opt)
+void read__`info.typespec.normalized()`(int stack, `info.typespec.ctype()` *msg, const ROSReadOptions *opt)
 {
     try
     {
