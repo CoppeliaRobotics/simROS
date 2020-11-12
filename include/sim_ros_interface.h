@@ -13,9 +13,7 @@
 #include <image_transport/image_transport.h>
 
 #include "config.h"
-
-#define PLUGIN_NAME "ROSInterface"
-#define PLUGIN_VERSION 5
+#include "plugin.h"
 
 struct ScriptCallback
 {
