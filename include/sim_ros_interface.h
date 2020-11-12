@@ -38,7 +38,7 @@ struct SubscriberProxy : Proxy
     ScriptCallback topicCallback;
     ros::Subscriber subscriber;
     image_transport::Subscriber imageTransportSubscriber;
-    WriteOptions wr_opt;
+    ROSWriteOptions wr_opt;
 };
 
 struct PublisherProxy : Proxy
@@ -48,7 +48,7 @@ struct PublisherProxy : Proxy
     std::string topicType;
     ros::Publisher publisher;
     image_transport::Publisher imageTransportPublisher;
-    ReadOptions rd_opt;
+    ROSReadOptions rd_opt;
 };
 
 struct ServiceClientProxy : Proxy
@@ -57,8 +57,8 @@ struct ServiceClientProxy : Proxy
     std::string serviceName;
     std::string serviceType;
     ros::ServiceClient client;
-    ReadOptions rd_opt;
-    WriteOptions wr_opt;
+    ROSReadOptions rd_opt;
+    ROSWriteOptions wr_opt;
 };
 
 struct ServiceServerProxy : Proxy
@@ -68,8 +68,8 @@ struct ServiceServerProxy : Proxy
     std::string serviceType;
     ScriptCallback serviceCallback;
     ros::ServiceServer server;
-    ReadOptions rd_opt;
-    WriteOptions wr_opt;
+    ROSReadOptions rd_opt;
+    ROSWriteOptions wr_opt;
 };
 
 #include <stubs.h>
