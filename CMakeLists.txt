@@ -47,8 +47,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated)
 include_directories(${catkin_INCLUDE_DIRS})
-include_directories(${COPPELIASIM_INCLUDE_DIR})
-include_directories(${COPPELIASIM_COMMON_DIR})
 
 set(generatedFiles)
 file(GLOB templateFiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/templates/ ${CMAKE_CURRENT_SOURCE_DIR}/templates/*)
@@ -64,15 +62,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in ${CMAKE_CURRENT_B
 set(SOURCES
     src/sim_ros_interface.cpp
     src/ros_msg_builtin_io.cpp
-    ${COPPELIASIM_EXPORTED_SOURCES}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_srv_io.cpp
 )
-add_library(simExtROSInterface ${SOURCES})
+coppeliasim_add_plugin(simExtROSInterface SOURCES ${SOURCES})
 add_dependencies(simExtROSInterface generate_ros_code)
-target_link_libraries(simExtROSInterface
-    ${catkin_LIBRARIES}
-    ${COPPELIASIM_LIBRARIES})
-
-install(TARGETS simExtROSInterface DESTINATION ${COPPELIASIM_PLUGINS_DIR})
-
+target_link_libraries(simExtROSInterface ${catkin_LIBRARIES})
