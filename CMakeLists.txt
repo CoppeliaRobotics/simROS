@@ -58,7 +58,7 @@ foreach(templateFile ${templateFiles})
     set(generatedFiles ${generatedFiles} "${CMAKE_CURRENT_BINARY_DIR}/generated/${templateFile}")
 endforeach()
 add_custom_target(generate_ros_code DEPENDS ${generatedFiles})
-coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/meta/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simExtROSInterface.lua)
+coppeliasim_generate_stubs(${CMAKE_CURRENT_BINARY_DIR}/generated XML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/meta/callbacks.xml LUA_FILE ${CMAKE_CURRENT_SOURCE_DIR}/simROS.lua)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 
@@ -69,11 +69,11 @@ set(SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_srv_io.cpp
 )
-add_library(simExtROSInterface ${SOURCES})
-add_dependencies(simExtROSInterface generate_ros_code)
-target_link_libraries(simExtROSInterface
+add_library(simExtROS ${SOURCES})
+add_dependencies(simExtROS generate_ros_code)
+target_link_libraries(simExtROS
     ${catkin_LIBRARIES}
     ${COPPELIASIM_LIBRARIES})
 
-install(TARGETS simExtROSInterface DESTINATION ${COPPELIASIM_PLUGINS_DIR})
+install(TARGETS simExtROS DESTINATION ${COPPELIASIM_PLUGINS_DIR})
 
