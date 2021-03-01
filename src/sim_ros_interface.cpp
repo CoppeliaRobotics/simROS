@@ -1,5 +1,6 @@
 #include <sim_ros_interface.h>
 #include <simPlusPlus/Plugin.h>
+#include <simPlusPlus/Handle.h>
 
 #include <tf/transform_broadcaster.h>
 #include <sensor_msgs/image_encodings.h>
@@ -65,6 +66,58 @@ public:
         shutdown();
     }
 
+    void onScriptStateDestroyed(int scriptID)
+    {
+        for(auto proxy : publisherHandles.find(scriptID))
+        {
+            if(proxy->publisher)
+            {
+                shutdownPublisher_in in;
+                in.publisherHandle = proxy->handle;
+                shutdownPublisher_out out;
+                shutdownPublisher(&in, &out);
+            }
+            if(proxy->imageTransportPublisher)
+            {
+                imageTransportShutdownPublisher_in in;
+                in.publisherHandle = proxy->handle;
+                imageTransportShutdownPublisher_out out;
+                imageTransportShutdownPublisher(&in, &out);
+            }
+        }
+        for(auto proxy : subscriberHandles.find(scriptID))
+        {
+            if(proxy->subscriber)
+            {
+                shutdownSubscriber_in in;
+                in.subscriberHandle = proxy->handle;
+                shutdownSubscriber_out out;
+                shutdownSubscriber(&in, &out);
+            }
+            if(proxy->imageTransportSubscriber)
+            {
+                imageTransportShutdownSubscriber_in in;
+                in.subscriberHandle = proxy->handle;
+                imageTransportShutdownSubscriber_out out;
+                imageTransportShutdownSubscriber(&in, &out);
+            }
+        }
+        for(auto proxy : serviceClientHandles.find(scriptID))
+        {
+            shutdownServiceClient_in in;
+            in.serviceClientHandle = proxy->handle;
+            shutdownServiceClient_out out;
+            shutdownServiceClient(&in, &out);
+        }
+        for(auto proxy : serviceServerHandles.find(scriptID))
+        {
+            shutdownServiceServer_in in;
+            in.serviceServerHandle = proxy->handle;
+            shutdownServiceServer_out out;
+            shutdownServiceServer(&in, &out);
+        }
+    }
+
     void onInstancePass(const sim::InstancePassFlags &flags, bool first)
     {
         ros::spinOnce();
@@ -92,41 +145,13 @@ public:
         previousStopSimulationRequestCounter = -1;
     }
 
-    void onSimulationEnded()
-    {
-        shutdownTransientProxies();
-    }
-
-    bool shouldProxyBeDestroyedAfterSimulationStop(int scriptID)
-    {
-        if(simGetSimulationState() == sim_simulation_stopped)
-            return false;
-        int property;
-        int associatedObject;
-        if(simGetScriptProperty(scriptID, &property, &associatedObject) == -1)
-            return false;
-#if SIM_PROGRAM_FULL_VERSION_NB <= 4010003
-        if(property & sim_scripttype_threaded)
-            property -= sim_scripttype_threaded;
-#else
-        if(property & sim_scripttype_threaded_old)
-            property -= sim_scripttype_threaded_old;
-#endif
-        if(property == sim_scripttype_addonscript || property == sim_scripttype_addonfunction || property == sim_scripttype_customizationscript)
-            return false;
-        return true;
-    }
-
     void subscribe(subscribe_in *in, subscribe_out *out)
     {
         SubscriberProxy *subscriberProxy = new SubscriberProxy();
-        subscriberProxy->destroyAfterSimulationStop = shouldProxyBeDestroyedAfterSimulationStop(in->_scriptID);
-        subscriberProxy->handle = subscriberProxyNextHandle++;
         subscriberProxy->topicName = in->topicName;
         subscriberProxy->topicType = in->topicType;
         subscriberProxy->topicCallback.scriptId = in->_scriptID;
         subscriberProxy->topicCallback.name = in->topicCallback;
-        subscriberProxies[subscriberProxy->handle] = subscriberProxy;
 
         ros::TransportHints th;
         th.tcpNoDelay(in->transportHints.tcpNoDelay);
@@ -152,41 +177,27 @@ public:
             throw sim::exception("failed creation of ROS subscriber");
         }
 
-        out->subscriberHandle = subscriberProxy->handle;
+        out->subscriberHandle = subscriberProxy->handle = subscriberHandles.add(subscriberProxy, in->_scriptID);
     }
 
     void shutdownSubscriber(shutdownSubscriber_in *in, shutdownSubscriber_out *out)
     {
-        if(subscriberProxies.find(in->subscriberHandle) == subscriberProxies.end())
-        {
-            throw sim::exception("invalid subscriber handle");
-        }
-
-        SubscriberProxy *subscriberProxy = subscriberProxies[in->subscriberHandle];
+        SubscriberProxy *subscriberProxy = subscriberHandles.get(in->subscriberHandle);
         subscriberProxy->subscriber.shutdown();
-        subscriberProxies.erase(subscriberProxy->handle);
-        delete subscriberProxy;
+        delete subscriberHandles.remove(subscriberProxy);
     }
 
     void subscriberTreatUInt8ArrayAsString(subscriberTreatUInt8ArrayAsString_in *in, subscriberTreatUInt8ArrayAsString_out *out)
     {
-        if(subscriberProxies.find(in->subscriberHandle) == subscriberProxies.end())
-        {
-            throw sim::exception("invalid subscriber handle");
-        }
-
-        SubscriberProxy *subscriberProxy = subscriberProxies[in->subscriberHandle];
+        SubscriberProxy *subscriberProxy = subscriberHandles.get(in->subscriberHandle);
         subscriberProxy->wr_opt.uint8array_as_string = true;
     }
 
     void advertise(advertise_in *in, advertise_out *out)
     {
         PublisherProxy *publisherProxy = new PublisherProxy();
-        publisherProxy->destroyAfterSimulationStop = shouldProxyBeDestroyedAfterSimulationStop(in->_scriptID);
-        publisherProxy->handle = publisherProxyNextHandle++;
         publisherProxy->topicName = in->topicName;
         publisherProxy->topicType = in->topicType;
-        publisherProxies[publisherProxy->handle] = publisherProxy;
 
         if(0) {}
 #include <adv.cpp>
@@ -200,41 +211,25 @@ public:
             throw sim::exception("failed creation of ROS publisher");
         }
 
-        out->publisherHandle = publisherProxy->handle;
+        out->publisherHandle = publisherProxy->handle = publisherHandles.add(publisherProxy, in->_scriptID);
     }
 
     void shutdownPublisher(shutdownPublisher_in *in, shutdownPublisher_out *out)
     {
-        if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
-        {
-            throw sim::exception("invalid publisher handle");
-        }
-
-        PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
+        PublisherProxy *publisherProxy = publisherHandles.get(in->publisherHandle);
         publisherProxy->publisher.shutdown();
-        publisherProxies.erase(publisherProxy->handle);
-        delete publisherProxy;
+        delete publisherHandles.remove(publisherProxy);
     }
 
     void publisherTreatUInt8ArrayAsString(publisherTreatUInt8ArrayAsString_in *in, publisherTreatUInt8ArrayAsString_out *out)
     {
-        if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
-        {
-            throw sim::exception("invalid publisher handle");
-        }
-
-        PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
+        PublisherProxy *publisherProxy = publisherHandles.get(in->publisherHandle);
         publisherProxy->rd_opt.uint8array_as_string = true;
     }
 
     void publish(publish_in *in, publish_out *out)
     {
-        if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
-        {
-            throw sim::exception("invalid publisher handle");
-        }
-
-        PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
+        PublisherProxy *publisherProxy = publisherHandles.get(in->publisherHandle);
 
         simMoveStackItemToTop(in->_stackID, 0);
 
@@ -249,11 +244,8 @@ public:
     void serviceClient(serviceClient_in *in, serviceClient_out *out)
     {
         ServiceClientProxy *serviceClientProxy = new ServiceClientProxy();
-        serviceClientProxy->destroyAfterSimulationStop = shouldProxyBeDestroyedAfterSimulationStop(in->_scriptID);
-        serviceClientProxy->handle = serviceClientProxyNextHandle++;
         serviceClientProxy->serviceName = in->serviceName;
         serviceClientProxy->serviceType = in->serviceType;
-        serviceClientProxies[serviceClientProxy->handle] = serviceClientProxy;
 
         if(0) {}
 #include <srvcli.cpp>
@@ -267,42 +259,26 @@ public:
             throw sim::exception("failed creation of ROS service client");
         }
 
-        out->serviceClientHandle = serviceClientProxy->handle;
+        out->serviceClientHandle = serviceClientProxy->handle = serviceClientHandles.add(serviceClientProxy, in->_scriptID);
     }
 
     void shutdownServiceClient(shutdownServiceClient_in *in, shutdownServiceClient_out *out)
     {
-        if(serviceClientProxies.find(in->serviceClientHandle) == serviceClientProxies.end())
-        {
-            throw sim::exception("invalid service client handle");
-        }
-
-        ServiceClientProxy *serviceClientProxy = serviceClientProxies[in->serviceClientHandle];
+        ServiceClientProxy *serviceClientProxy = serviceClientHandles.get(in->serviceClientHandle);
         serviceClientProxy->client.shutdown();
-        serviceClientProxies.erase(serviceClientProxy->handle);
-        delete serviceClientProxy;
+        delete serviceClientHandles.remove(serviceClientProxy);
     }
 
     void serviceClientTreatUInt8ArrayAsString(serviceClientTreatUInt8ArrayAsString_in *in, serviceClientTreatUInt8ArrayAsString_out *out)
     {
-        if(serviceClientProxies.find(in->serviceClientHandle) == serviceClientProxies.end())
-        {
-            throw sim::exception("invalid service client handle");
-        }
-
-        ServiceClientProxy *serviceClientProxy = serviceClientProxies[in->serviceClientHandle];
+        ServiceClientProxy *serviceClientProxy = serviceClientHandles.get(in->serviceClientHandle);
         serviceClientProxy->rd_opt.uint8array_as_string = true;
         serviceClientProxy->wr_opt.uint8array_as_string = true;
     }
 
     void call(call_in *in, call_out *out)
     {
-        if(serviceClientProxies.find(in->serviceClientHandle) == serviceClientProxies.end())
-        {
-            throw sim::exception("invalid service client handle");
-        }
-
-        ServiceClientProxy *serviceClientProxy = serviceClientProxies[in->serviceClientHandle];
+        ServiceClientProxy *serviceClientProxy = serviceClientHandles.get(in->serviceClientHandle);
 
         simMoveStackItemToTop(in->_stackID, 0);
 
@@ -317,13 +293,10 @@ public:
     void advertiseService(advertiseService_in *in, advertiseService_out *out)
     {
         ServiceServerProxy *serviceServerProxy = new ServiceServerProxy();
-        serviceServerProxy->destroyAfterSimulationStop = shouldProxyBeDestroyedAfterSimulationStop(in->_scriptID);
-        serviceServerProxy->handle = serviceServerProxyNextHandle++;
         serviceServerProxy->serviceName = in->serviceName;
         serviceServerProxy->serviceType = in->serviceType;
         serviceServerProxy->serviceCallback.scriptId = in->_scriptID;
         serviceServerProxy->serviceCallback.name = in->serviceCallback;
-        serviceServerProxies[serviceServerProxy->handle] = serviceServerProxy;
 
         if(0) {}
 #include <srvsrv.cpp>
@@ -337,30 +310,19 @@ public:
             throw sim::exception("failed creation of ROS service server");
         }
 
-        out->serviceServerHandle = serviceServerProxy->handle;
+        out->serviceServerHandle = serviceServerProxy->handle = serviceServerHandles.add(serviceServerProxy, in->_scriptID);
     }
 
     void shutdownServiceServer(shutdownServiceServer_in *in, shutdownServiceServer_out *out)
     {
-        if(serviceServerProxies.find(in->serviceServerHandle) == serviceServerProxies.end())
-        {
-            throw sim::exception("invalid service server handle");
-        }
-
-        ServiceServerProxy *serviceServerProxy = serviceServerProxies[in->serviceServerHandle];
+        ServiceServerProxy *serviceServerProxy = serviceServerHandles.get(in->serviceServerHandle);
         serviceServerProxy->server.shutdown();
-        serviceServerProxies.erase(serviceServerProxy->handle);
-        delete serviceServerProxy;
+        delete serviceServerHandles.remove(serviceServerProxy);
     }
 
     void serviceServerTreatUInt8ArrayAsString(serviceServerTreatUInt8ArrayAsString_in *in, serviceServerTreatUInt8ArrayAsString_out *out)
     {
-        if(serviceServerProxies.find(in->serviceServerHandle) == serviceServerProxies.end())
-        {
-            throw sim::exception("invalid service server handle");
-        }
-
-        ServiceServerProxy *serviceServerProxy = serviceServerProxies[in->serviceServerHandle];
+        ServiceServerProxy *serviceServerProxy = serviceServerHandles.get(in->serviceServerHandle);
         serviceServerProxy->rd_opt.uint8array_as_string = true;
         serviceServerProxy->wr_opt.uint8array_as_string = true;
     }
@@ -400,13 +362,10 @@ public:
     void imageTransportSubscribe(imageTransportSubscribe_in *in, imageTransportSubscribe_out *out)
     {
         SubscriberProxy *subscriberProxy = new SubscriberProxy();
-        subscriberProxy->destroyAfterSimulationStop = shouldProxyBeDestroyedAfterSimulationStop(in->_scriptID);
-        subscriberProxy->handle = subscriberProxyNextHandle++;
         subscriberProxy->topicName = in->topicName;
         subscriberProxy->topicType = "@image_transport";
         subscriberProxy->topicCallback.scriptId = in->_scriptID;
         subscriberProxy->topicCallback.name = in->topicCallback;
-        subscriberProxies[subscriberProxy->handle] = subscriberProxy;
 
         subscriberProxy->imageTransportSubscriber = imtr->subscribe(in->topicName, in->queueSize, boost::bind(ros_imtr_callback, _1, subscriberProxy));
 
@@ -415,30 +374,21 @@ public:
             throw sim::exception("failed creation of ROS ImageTransport subscriber");
         }
 
-        out->subscriberHandle = subscriberProxy->handle;
+        out->subscriberHandle = subscriberProxy->handle = subscriberHandles.add(subscriberProxy, in->_scriptID);
     }
 
     void imageTransportShutdownSubscriber(imageTransportShutdownSubscriber_in *in, imageTransportShutdownSubscriber_out *out)
     {
-        if(subscriberProxies.find(in->subscriberHandle) == subscriberProxies.end())
-        {
-            throw sim::exception("invalid subscriber handle");
-        }
-
-        SubscriberProxy *subscriberProxy = subscriberProxies[in->subscriberHandle];
+        SubscriberProxy *subscriberProxy = subscriberHandles.get(in->subscriberHandle);
         subscriberProxy->imageTransportSubscriber.shutdown();
-        subscriberProxies.erase(subscriberProxy->handle);
-        delete subscriberProxy;
+        delete subscriberHandles.remove(subscriberProxy);
     }
 
     void imageTransportAdvertise(imageTransportAdvertise_in *in, imageTransportAdvertise_out *out)
     {
         PublisherProxy *publisherProxy = new PublisherProxy();
-        publisherProxy->destroyAfterSimulationStop = shouldProxyBeDestroyedAfterSimulationStop(in->_scriptID);
-        publisherProxy->handle = publisherProxyNextHandle++;
         publisherProxy->topicName = in->topicName;
         publisherProxy->topicType = "@image_transport";
-        publisherProxies[publisherProxy->handle] = publisherProxy;
 
         publisherProxy->imageTransportPublisher = imtr->advertise(in->topicName, in->queueSize);
 
@@ -447,30 +397,19 @@ public:
             throw sim::exception("failed creation of ROS ImageTransport publisher");
         }
 
-        out->publisherHandle = publisherProxy->handle;
+        out->publisherHandle = publisherProxy->handle = publisherHandles.add(publisherProxy, in->_scriptID);
     }
 
     void imageTransportShutdownPublisher(imageTransportShutdownPublisher_in *in, imageTransportShutdownPublisher_out *out)
     {
-        if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
-        {
-            throw sim::exception("invalid publisher handle");
-        }
-
-        PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
+        PublisherProxy *publisherProxy = publisherHandles.get(in->publisherHandle);
         publisherProxy->imageTransportPublisher.shutdown();
-        publisherProxies.erase(publisherProxy->handle);
-        delete publisherProxy;
+        delete publisherHandles.remove(publisherProxy);
     }
 
     void imageTransportPublish(imageTransportPublish_in *in, imageTransportPublish_out *out)
     {
-        if(publisherProxies.find(in->publisherHandle) == publisherProxies.end())
-        {
-            throw sim::exception("invalid publisher handle");
-        }
-
-        PublisherProxy *publisherProxy = publisherProxies[in->publisherHandle];
+        PublisherProxy *publisherProxy = publisherHandles.get(in->publisherHandle);
 
         sensor_msgs::Image image_msg;
         image_msg.header.stamp = ros::Time::now();
@@ -598,120 +537,6 @@ public:
         delete nh;
     }
 
-    void shutdownTransientSubscribers()
-    {
-        std::vector<int> handles;
-
-        for(std::map<int, SubscriberProxy *>::iterator it = subscriberProxies.begin(); it != subscriberProxies.end(); ++it)
-        {
-            if(it->second->destroyAfterSimulationStop)
-            {
-                handles.push_back(it->first);
-            }
-        }
-
-        for(std::vector<int>::iterator it = handles.begin(); it != handles.end(); ++it)
-        {
-            SubscriberProxy *proxy = subscriberProxies[*it];
-            if(proxy->subscriber)
-            {
-                shutdownSubscriber_in in;
-                in.subscriberHandle = *it;
-                shutdownSubscriber_out out;
-                shutdownSubscriber(&in, &out);
-            }
-            if(proxy->imageTransportSubscriber)
-            {
-                imageTransportShutdownSubscriber_in in;
-                in.subscriberHandle = *it;
-                imageTransportShutdownSubscriber_out out;
-                imageTransportShutdownSubscriber(&in, &out);
-            }
-        }
-    }
-
-    void shutdownTransientPublishers()
-    {
-        std::vector<int> handles;
-
-        for(std::map<int, PublisherProxy *>::iterator it = publisherProxies.begin(); it != publisherProxies.end(); ++it)
-        {
-            if(it->second->destroyAfterSimulationStop)
-            {
-                handles.push_back(it->first);
-            }
-        }
-
-        for(std::vector<int>::iterator it = handles.begin(); it != handles.end(); ++it)
-        {
-            PublisherProxy *proxy = publisherProxies[*it];
-            if(proxy->publisher)
-            {
-                shutdownPublisher_in in;
-                in.publisherHandle = *it;
-                shutdownPublisher_out out;
-                shutdownPublisher(&in, &out);
-            }
-            if(proxy->imageTransportPublisher)
-            {
-                imageTransportShutdownPublisher_in in;
-                in.publisherHandle = *it;
-                imageTransportShutdownPublisher_out out;
-                imageTransportShutdownPublisher(&in, &out);
-            }
-        }
-    }
-
-    void shutdownTransientServiceClients()
-    {
-        std::vector<int> handles;
-
-        for(std::map<int, ServiceClientProxy *>::iterator it = serviceClientProxies.begin(); it != serviceClientProxies.end(); ++it)
-        {
-            if(it->second->destroyAfterSimulationStop)
-            {
-                handles.push_back(it->first);
-            }
-        }
-
-        for(std::vector<int>::iterator it = handles.begin(); it != handles.end(); ++it)
-        {
-            shutdownServiceClient_in in;
-            in.serviceClientHandle = *it;
-            shutdownServiceClient_out out;
-            shutdownServiceClient(&in, &out);
-        }
-    }
-
-    void shutdownTransientServiceServers()
-    {
-        std::vector<int> handles;
-
-        for(std::map<int, ServiceServerProxy *>::iterator it = serviceServerProxies.begin(); it != serviceServerProxies.end(); ++it)
-        {
-            if(it->second->destroyAfterSimulationStop)
-            {
-                handles.push_back(it->first);
-            }
-        }
-
-        for(std::vector<int>::iterator it = handles.begin(); it != handles.end(); ++it)
-        {
-            shutdownServiceServer_in in;
-            in.serviceServerHandle = *it;
-            shutdownServiceServer_out out;
-            shutdownServiceServer(&in, &out);
-        }
-    }
-
-    void shutdownTransientProxies()
-    {
-        shutdownTransientSubscribers();
-        shutdownTransientPublishers();
-        shutdownTransientServiceClients();
-        shutdownTransientServiceServers();
-    }
-
 private:
     int previousStopSimulationRequestCounter = -1;
 
@@ -720,15 +545,10 @@ private:
     tf::TransformBroadcaster *tfbr = NULL;
     image_transport::ImageTransport *imtr = NULL;
 
-    int subscriberProxyNextHandle = 3562;
-    int publisherProxyNextHandle = 7980;
-    int serviceClientProxyNextHandle = 26856;
-    int serviceServerProxyNextHandle = 53749;
-
-    std::map<int, SubscriberProxy *> subscriberProxies;
-    std::map<int, PublisherProxy *> publisherProxies;
-    std::map<int, ServiceClientProxy *> serviceClientProxies;
-    std::map<int, ServiceServerProxy *> serviceServerProxies;
+    sim::Handles<SubscriberProxy> subscriberHandles;
+    sim::Handles<PublisherProxy> publisherHandles;
+    sim::Handles<ServiceClientProxy> serviceClientHandles;
+    sim::Handles<ServiceServerProxy> serviceServerHandles;
 };
 
 SIM_PLUGIN(PLUGIN_NAME, PLUGIN_VERSION, Plugin)

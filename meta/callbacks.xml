@@ -29,7 +29,7 @@
             </param>
         </params>
         <return>
-            <param name="subscriberHandle" type="int">
+            <param name="subscriberHandle" type="string">
                 <description>a handle to the ROS subscriber</description>
             </param>
         </return>
@@ -43,7 +43,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="subscriberHandle" type="int">
+            <param name="subscriberHandle" type="string">
                 <description>the subscriber handle</description>
             </param>
         </params>
@@ -59,7 +59,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="subscriberHandle" type="int">
+            <param name="subscriberHandle" type="string">
                 <description>the subscriber handle</description>
             </param>
         </params>
@@ -89,7 +89,7 @@
             </param>
         </params>
         <return>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>a handle to the ROS publisher</description>
             </param>
         </return>
@@ -103,7 +103,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>the publisher handle</description>
             </param>
         </params>
@@ -119,7 +119,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>the publisher handle</description>
             </param>
         </params>
@@ -135,7 +135,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>the publisher handle</description>
             </param>
             <param name="message" type="table" skip="true">
@@ -165,7 +165,7 @@
             </param>
         </params>
         <return>
-            <param name="serviceClientHandle" type="int">
+            <param name="serviceClientHandle" type="string">
                 <description>a handle to the ROS service client</description>
             </param>
         </return>
@@ -179,7 +179,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="serviceClientHandle" type="int">
+            <param name="serviceClientHandle" type="string">
                 <description>the service client handle</description>
             </param>
         </params>
@@ -195,7 +195,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="serviceClientHandle" type="int">
+            <param name="serviceClientHandle" type="string">
                 <description>the service client handle</description>
             </param>
         </params>
@@ -211,7 +211,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="serviceClientHandle" type="int">
+            <param name="serviceClientHandle" type="string">
                 <description>the service client handle</description>
             </param>
             <param name="request" type="table" skip="true">
@@ -247,7 +247,7 @@
             </param>
         </params>
         <return>
-            <param name="serviceServerHandle" type="int">
+            <param name="serviceServerHandle" type="string">
                 <description>a handle to the ROS service server</description>
             </param>
         </return>
@@ -261,7 +261,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="serviceServerHandle" type="int">
+            <param name="serviceServerHandle" type="string">
                 <description>the service server handle</description>
             </param>
         </params>
@@ -277,7 +277,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="serviceServerHandle" type="int">
+            <param name="serviceServerHandle" type="string">
                 <description>the service server handle</description>
             </param>
         </params>
@@ -339,7 +339,7 @@
             </param>
         </params>
         <return>
-            <param name="subscriberHandle" type="int">
+            <param name="subscriberHandle" type="string">
                 <description>a handle to the ROS subscriber</description>
             </param>
         </return>
@@ -354,7 +354,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="subscriberHandle" type="int">
+            <param name="subscriberHandle" type="string">
                 <description>the subscriber handle</description>
             </param>
         </params>
@@ -379,7 +379,7 @@
             </param>
         </params>
         <return>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>a handle to the ROS publisher</description>
             </param>
         </return>
@@ -394,7 +394,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>the publisher handle</description>
             </param>
         </params>
@@ -411,7 +411,7 @@
             <!--command name="..." /-->
         </see-also>
         <params>
-            <param name="publisherHandle" type="int">
+            <param name="publisherHandle" type="string">
                 <description>the publisher handle</description>
             </param>
             <param name="data" type="string">
