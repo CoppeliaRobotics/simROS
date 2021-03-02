@@ -4,10 +4,10 @@
     else if(serviceClientProxy->serviceType == "`info.typespec.fullname`")
     {
         `info.typespec.ctype()` srv;
-        read__`info.typespec.normalized()`Request(in->_stackID, &(srv.request), &(serviceClientProxy->rd_opt));
+        read__`info.typespec.normalized()`Request(in->_.stackID, &(srv.request), &(serviceClientProxy->rd_opt));
         if(serviceClientProxy->client.call(srv))
         {
-            write__`info.typespec.normalized()`Response(srv.response, in->_stackID, &(serviceClientProxy->wr_opt));
+            write__`info.typespec.normalized()`Response(srv.response, in->_.stackID, &(serviceClientProxy->wr_opt));
         }
         else
         {

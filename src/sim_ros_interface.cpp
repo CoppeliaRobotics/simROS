@@ -150,7 +150,7 @@ public:
         SubscriberProxy *subscriberProxy = new SubscriberProxy();
         subscriberProxy->topicName = in->topicName;
         subscriberProxy->topicType = in->topicType;
-        subscriberProxy->topicCallback.scriptId = in->_scriptID;
+        subscriberProxy->topicCallback.scriptId = in->_.scriptID;
         subscriberProxy->topicCallback.name = in->topicCallback;
 
         ros::TransportHints th;
@@ -177,7 +177,7 @@ public:
             throw sim::exception("failed creation of ROS subscriber");
         }
 
-        out->subscriberHandle = subscriberProxy->handle = subscriberHandles.add(subscriberProxy, in->_scriptID);
+        out->subscriberHandle = subscriberProxy->handle = subscriberHandles.add(subscriberProxy, in->_.scriptID);
     }
 
     void shutdownSubscriber(shutdownSubscriber_in *in, shutdownSubscriber_out *out)
@@ -211,7 +211,7 @@ public:
             throw sim::exception("failed creation of ROS publisher");
         }
 
-        out->publisherHandle = publisherProxy->handle = publisherHandles.add(publisherProxy, in->_scriptID);
+        out->publisherHandle = publisherProxy->handle = publisherHandles.add(publisherProxy, in->_.scriptID);
     }
 
     void shutdownPublisher(shutdownPublisher_in *in, shutdownPublisher_out *out)
@@ -231,7 +231,7 @@ public:
     {
         PublisherProxy *publisherProxy = publisherHandles.get(in->publisherHandle);
 
-        simMoveStackItemToTop(in->_stackID, 0);
+        simMoveStackItemToTop(in->_.stackID, 0);
 
         if(0) {}
 #include <pub.cpp>
@@ -259,7 +259,7 @@ public:
             throw sim::exception("failed creation of ROS service client");
         }
 
-        out->serviceClientHandle = serviceClientProxy->handle = serviceClientHandles.add(serviceClientProxy, in->_scriptID);
+        out->serviceClientHandle = serviceClientProxy->handle = serviceClientHandles.add(serviceClientProxy, in->_.scriptID);
     }
 
     void shutdownServiceClient(shutdownServiceClient_in *in, shutdownServiceClient_out *out)
@@ -280,7 +280,7 @@ public:
     {
         ServiceClientProxy *serviceClientProxy = serviceClientHandles.get(in->serviceClientHandle);
 
-        simMoveStackItemToTop(in->_stackID, 0);
+        simMoveStackItemToTop(in->_.stackID, 0);
 
         if(0) {}
 #include <srvcall.cpp>
@@ -295,7 +295,7 @@ public:
         ServiceServerProxy *serviceServerProxy = new ServiceServerProxy();
         serviceServerProxy->serviceName = in->serviceName;
         serviceServerProxy->serviceType = in->serviceType;
-        serviceServerProxy->serviceCallback.scriptId = in->_scriptID;
+        serviceServerProxy->serviceCallback.scriptId = in->_.scriptID;
         serviceServerProxy->serviceCallback.name = in->serviceCallback;
 
         if(0) {}
@@ -310,7 +310,7 @@ public:
             throw sim::exception("failed creation of ROS service server");
         }
 
-        out->serviceServerHandle = serviceServerProxy->handle = serviceServerHandles.add(serviceServerProxy, in->_scriptID);
+        out->serviceServerHandle = serviceServerProxy->handle = serviceServerHandles.add(serviceServerProxy, in->_.scriptID);
     }
 
     void shutdownServiceServer(shutdownServiceServer_in *in, shutdownServiceServer_out *out)
@@ -330,7 +330,7 @@ public:
     void sendTransform(sendTransform_in *in, sendTransform_out *out)
     {
         geometry_msgs::TransformStamped t;
-        read__geometry_msgs__TransformStamped(in->_stackID, &t);
+        read__geometry_msgs__TransformStamped(in->_.stackID, &t);
         tfbr->sendTransform(t);
     }
 
@@ -338,21 +338,21 @@ public:
     {
         std::vector<geometry_msgs::TransformStamped> v;
 
-        sim::moveStackItemToTop(in->_stackID, 0);
-        int i = sim::getStackTableInfo(in->_stackID, 0);
+        sim::moveStackItemToTop(in->_.stackID, 0);
+        int i = sim::getStackTableInfo(in->_.stackID, 0);
         if(i < 0)
             throw sim::exception("error reading input argument 1 (origin): expected array");
-        int oldsz = sim::getStackSize(in->_stackID);
-        sim::unfoldStackTable(in->_stackID);
-        int sz = (sim::getStackSize(in->_stackID) - oldsz + 1) / 2;
+        int oldsz = sim::getStackSize(in->_.stackID);
+        sim::unfoldStackTable(in->_.stackID);
+        int sz = (sim::getStackSize(in->_.stackID) - oldsz + 1) / 2;
         for(int i = 0; i < sz; i++)
         {
-            sim::moveStackItemToTop(in->_stackID, oldsz - 1);
+            sim::moveStackItemToTop(in->_.stackID, oldsz - 1);
             int j;
-            read__int32(in->_stackID, &j);
-            simMoveStackItemToTop(in->_stackID, oldsz - 1);
+            read__int32(in->_.stackID, &j);
+            simMoveStackItemToTop(in->_.stackID, oldsz - 1);
             geometry_msgs::TransformStamped t;
-            read__geometry_msgs__TransformStamped(in->_stackID, &t);
+            read__geometry_msgs__TransformStamped(in->_.stackID, &t);
             v.push_back(t);
         }
 
@@ -364,7 +364,7 @@ public:
         SubscriberProxy *subscriberProxy = new SubscriberProxy();
         subscriberProxy->topicName = in->topicName;
         subscriberProxy->topicType = "@image_transport";
-        subscriberProxy->topicCallback.scriptId = in->_scriptID;
+        subscriberProxy->topicCallback.scriptId = in->_.scriptID;
         subscriberProxy->topicCallback.name = in->topicCallback;
 
         subscriberProxy->imageTransportSubscriber = imtr->subscribe(in->topicName, in->queueSize, boost::bind(ros_imtr_callback, _1, subscriberProxy));
@@ -374,7 +374,7 @@ public:
             throw sim::exception("failed creation of ROS ImageTransport subscriber");
         }
 
-        out->subscriberHandle = subscriberProxy->handle = subscriberHandles.add(subscriberProxy, in->_scriptID);
+        out->subscriberHandle = subscriberProxy->handle = subscriberHandles.add(subscriberProxy, in->_.scriptID);
     }
 
     void imageTransportShutdownSubscriber(imageTransportShutdownSubscriber_in *in, imageTransportShutdownSubscriber_out *out)
@@ -397,7 +397,7 @@ public:
             throw sim::exception("failed creation of ROS ImageTransport publisher");
         }
 
-        out->publisherHandle = publisherProxy->handle = publisherHandles.add(publisherProxy, in->_scriptID);
+        out->publisherHandle = publisherProxy->handle = publisherHandles.add(publisherProxy, in->_.scriptID);
     }
 
     void imageTransportShutdownPublisher(imageTransportShutdownPublisher_in *in, imageTransportShutdownPublisher_out *out)

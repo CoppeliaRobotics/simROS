@@ -4,7 +4,7 @@
     else if(publisherProxy->topicType == "`info.typespec.fullname`")
     {
         `info.typespec.ctype()` msg;
-        read__`info.typespec.normalized()`(in->_stackID, &msg, &(publisherProxy->rd_opt));
+        read__`info.typespec.normalized()`(in->_.stackID, &msg, &(publisherProxy->rd_opt));
         publisherProxy->publisher.publish(msg);
     }
 #py endfor
