@@ -33,7 +33,7 @@ void write__`info.typespec.normalized()`(const `info.typespec.ctype()`& msg, int
             // write field '`n`' (using fast specialized function)
             sim::pushStringOntoStack(stack, "`n`", 0);
             if(opt && opt->uint8array_as_string)
-                sim::pushStringOntoStack(stack, (simChar*)&(msg.`n`[0]), msg.`n`.size());
+                sim::pushStringOntoStack(stack, (char*)&(msg.`n`[0]), msg.`n`.size());
             else
                 sim::pushUInt8TableOntoStack(stack, &(msg.`n`[0]), msg.`n`.size());
             sim::insertDataIntoStackTable(stack);
@@ -151,8 +151,8 @@ void read__`info.typespec.normalized()`(int stack, `info.typespec.ctype()` *msg,
                         if(opt && opt->uint8array_as_string)
                         {
                             // read field '`n`' (uint8[]) as string
-                            simChar *str;
-                            simInt sz;
+                            char *str;
+                            int sz;
                             if((str = sim::getStackStringValue(stack, &sz)) != NULL && sz > 0)
                             {
                                 /*

@@ -15,7 +15,7 @@ ROSWriteOptions::ROSWriteOptions()
 
 void read__bool(int stack, uint8_t *value, const ROSReadOptions *opt)
 {
-    simBool v;
+    bool v;
     if(sim::getStackBoolValue(stack, &v) == 1)
     {
         *value = v;
@@ -29,7 +29,7 @@ void read__bool(int stack, uint8_t *value, const ROSReadOptions *opt)
 
 void read__int8(int stack, int8_t *value, const ROSReadOptions *opt)
 {
-    simInt v;
+    int v;
     if(sim::getStackInt32Value(stack, &v) == 1)
     {
         *value = v;
@@ -43,7 +43,7 @@ void read__int8(int stack, int8_t *value, const ROSReadOptions *opt)
 
 void read__uint8(int stack, uint8_t *value, const ROSReadOptions *opt)
 {
-    simInt v;
+    int v;
     if(sim::getStackInt32Value(stack, &v) == 1)
     {
         *value = v;
@@ -57,7 +57,7 @@ void read__uint8(int stack, uint8_t *value, const ROSReadOptions *opt)
 
 void read__int16(int stack, int16_t *value, const ROSReadOptions *opt)
 {
-    simInt v;
+    int v;
     if(sim::getStackInt32Value(stack, &v) == 1)
     {
         *value = v;
@@ -71,7 +71,7 @@ void read__int16(int stack, int16_t *value, const ROSReadOptions *opt)
 
 void read__uint16(int stack, uint16_t *value, const ROSReadOptions *opt)
 {
-    simInt v;
+    int v;
     if(sim::getStackInt32Value(stack, &v) == 1)
     {
         *value = v;
@@ -85,7 +85,7 @@ void read__uint16(int stack, uint16_t *value, const ROSReadOptions *opt)
 
 void read__int32(int stack, int32_t *value, const ROSReadOptions *opt)
 {
-    simInt v;
+    int v;
     if(sim::getStackInt32Value(stack, &v) == 1)
     {
         *value = v;
@@ -99,7 +99,7 @@ void read__int32(int stack, int32_t *value, const ROSReadOptions *opt)
 
 void read__uint32(int stack, uint32_t *value, const ROSReadOptions *opt)
 {
-    simInt v;
+    int v;
     if(sim::getStackInt32Value(stack, &v) == 1)
     {
         *value = v;
@@ -114,7 +114,7 @@ void read__uint32(int stack, uint32_t *value, const ROSReadOptions *opt)
 void read__int64(int stack, int64_t *value, const ROSReadOptions *opt)
 {
     // XXX: we represent Int64 as double - possible loss of precision!
-    simDouble v;
+    double v;
     if(sim::getStackDoubleValue(stack, &v) == 1)
     {
         *value = v;
@@ -129,7 +129,7 @@ void read__int64(int stack, int64_t *value, const ROSReadOptions *opt)
 void read__uint64(int stack, uint64_t *value, const ROSReadOptions *opt)
 {
     // XXX: we represent UInt64 as double - possible loss of precision!
-    simDouble v;
+    double v;
     if(sim::getStackDoubleValue(stack, &v) == 1)
     {
         *value = v;
@@ -143,7 +143,7 @@ void read__uint64(int stack, uint64_t *value, const ROSReadOptions *opt)
 
 void read__float32(int stack, float *value, const ROSReadOptions *opt)
 {
-    simFloat v;
+    float v;
     if(sim::getStackFloatValue(stack, &v) == 1)
     {
         *value = v;
@@ -157,7 +157,7 @@ void read__float32(int stack, float *value, const ROSReadOptions *opt)
 
 void read__float64(int stack, double *value, const ROSReadOptions *opt)
 {
-    simDouble v;
+    double v;
     if(sim::getStackDoubleValue(stack, &v) == 1)
     {
         *value = v;
@@ -171,8 +171,8 @@ void read__float64(int stack, double *value, const ROSReadOptions *opt)
 
 void read__string(int stack, std::string *value, const ROSReadOptions *opt)
 {
-    simChar *str;
-    simInt strSize;
+    char *str;
+    int strSize;
     if((str = sim::getStackStringValue(stack, &strSize)) != NULL && strSize > 0)
     {
         *value = std::string(str, strSize);
@@ -187,7 +187,7 @@ void read__string(int stack, std::string *value, const ROSReadOptions *opt)
 
 void read__time(int stack, ros::Time *value, const ROSReadOptions *opt)
 {
-    simDouble v;
+    double v;
     if(sim::getStackDoubleValue(stack, &v) == 1)
     {
         *value = ros::Time(v);
@@ -201,7 +201,7 @@ void read__time(int stack, ros::Time *value, const ROSReadOptions *opt)
 
 void read__duration(int stack, ros::Duration *value, const ROSReadOptions *opt)
 {
-    simDouble v;
+    double v;
     if(sim::getStackDoubleValue(stack, &v) == 1)
     {
         *value = ros::Duration(v);
@@ -215,87 +215,87 @@ void read__duration(int stack, ros::Duration *value, const ROSReadOptions *opt)
 
 void write__bool(uint8_t value, int stack, const ROSWriteOptions *opt)
 {
-    simBool v = value;
+    bool v = value;
     sim::pushBoolOntoStack(stack, v);
 }
 
 void write__int8(int8_t value, int stack, const ROSWriteOptions *opt)
 {
-    simInt v = value;
+    int v = value;
     sim::pushInt32OntoStack(stack, v);
 }
 
 void write__uint8(uint8_t value, int stack, const ROSWriteOptions *opt)
 {
-    simInt v = value;
+    int v = value;
     sim::pushInt32OntoStack(stack, v);
 }
 
 void write__int16(int16_t value, int stack, const ROSWriteOptions *opt)
 {
-    simInt v = value;
+    int v = value;
     sim::pushInt32OntoStack(stack, v);
 }
 
 void write__uint16(uint16_t value, int stack, const ROSWriteOptions *opt)
 {
-    simInt v = value;
+    int v = value;
     sim::pushInt32OntoStack(stack, v);
 }
 
 void write__int32(int32_t value, int stack, const ROSWriteOptions *opt)
 {
-    simInt v = value;
+    int v = value;
     sim::pushInt32OntoStack(stack, v);
 }
 
 void write__uint32(uint32_t value, int stack, const ROSWriteOptions *opt)
 {
-    simInt v = value;
+    int v = value;
     sim::pushInt32OntoStack(stack, v);
 }
 
 void write__int64(int64_t value, int stack, const ROSWriteOptions *opt)
 {
     // XXX: we represent Int64 as double - possible loss of precision!
-    simDouble v = value;
+    double v = value;
     sim::pushDoubleOntoStack(stack, v);
 }
 
 void write__uint64(uint64_t value, int stack, const ROSWriteOptions *opt)
 {
     // XXX: we represent UInt64 as double - possible loss of precision!
-    simDouble v = value;
+    double v = value;
     sim::pushDoubleOntoStack(stack, v);
 }
 
 void write__float32(float value, int stack, const ROSWriteOptions *opt)
 {
-    simFloat v = value;
+    float v = value;
     sim::pushFloatOntoStack(stack, v);
 }
 
 void write__float64(double value, int stack, const ROSWriteOptions *opt)
 {
-    simDouble v = value;
+    double v = value;
     sim::pushDoubleOntoStack(stack, v);
 }
 
 void write__string(std::string value, int stack, const ROSWriteOptions *opt)
 {
-    const simChar *v = value.c_str();
+    const char *v = value.c_str();
     sim::pushStringOntoStack(stack, v, value.length());
 }
 
 void write__time(ros::Time value, int stack, const ROSWriteOptions *opt)
 {
-    simDouble v = value.toSec();
+    double v = value.toSec();
     sim::pushDoubleOntoStack(stack, v);
 }
 
 void write__duration(ros::Duration value, int stack, const ROSWriteOptions *opt)
 {
-    simDouble v = value.toSec();
+    double v = value.toSec();
     sim::pushDoubleOntoStack(stack, v);
 }
 
