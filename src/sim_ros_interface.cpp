@@ -1,6 +1,6 @@
 #include <sim_ros_interface.h>
 #include <simPlusPlus/Plugin.h>
-#include <simPlusPlus/Handle.h>
+#include <simPlusPlus/Handles.h>
 
 #include <tf/transform_broadcaster.h>
 #include <sensor_msgs/image_encodings.h>
@@ -545,10 +545,10 @@ private:
     tf::TransformBroadcaster *tfbr = NULL;
     image_transport::ImageTransport *imtr = NULL;
 
-    sim::Handles<SubscriberProxy> subscriberHandles;
-    sim::Handles<PublisherProxy> publisherHandles;
-    sim::Handles<ServiceClientProxy> serviceClientHandles;
-    sim::Handles<ServiceServerProxy> serviceServerHandles;
+    sim::Handles<SubscriberProxy*> subscriberHandles;
+    sim::Handles<PublisherProxy*> publisherHandles;
+    sim::Handles<ServiceClientProxy*> serviceClientHandles;
+    sim::Handles<ServiceServerProxy*> serviceServerHandles;
 };
 
 SIM_PLUGIN(PLUGIN_NAME, PLUGIN_VERSION, Plugin)
