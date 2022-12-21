@@ -127,8 +127,8 @@ public:
     {
 
         int stopSimulationRequestCounter;
-        simGetIntegerParameter(sim_intparam_stop_request_counter, &stopSimulationRequestCounter);
-        bool doNotRun = simGetBoolParameter(sim_boolparam_rosinterface_donotrunmainscript);
+        simGetInt32Param(sim_intparam_stop_request_counter, &stopSimulationRequestCounter);
+        bool doNotRun = simGetBoolParam(sim_boolparam_rosinterface_donotrunmainscript);
         if(doNotRun > 0)
         {
             if(previousStopSimulationRequestCounter == -1)
@@ -512,7 +512,7 @@ public:
 
         int node_name_length = 0;
         char *node_name = nullptr;
-        node_name = simGetStringNamedParam("ROSInterface.nodeName", &node_name_length);
+        node_name = simGetNamedStringParam("ROSInterface.nodeName", &node_name_length);
 
         ros::init(argc, argv, node_name && node_name_length ? node_name : "sim_ros_interface");
 
