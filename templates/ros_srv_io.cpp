@@ -1,6 +1,6 @@
 #include <ros_msg_io.h>
 #include <ros_srv_io.h>
-#include <simLib.h>
+#include <simLib/simLib.h>
 
 #py from parse_messages_and_services import get_srvs_info
 #py srvs = get_srvs_info(pycpp.params['services_file'])
