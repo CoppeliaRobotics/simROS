@@ -5,9 +5,6 @@ copying, etc.) contained in the same directory if it is present, or
 under the same terms of the files in the parent directory otherwise.
 
 -----------------------------------------------------------------------
-simExtROSInterface, based on v_repExtRosInterface from Coppelia Robotics AG
-on September 2019
-
 Copyright (C) 2016-2023 Coppelia Robotics AG
 Copyright (C) 2019 Robot Nordic ApS
 

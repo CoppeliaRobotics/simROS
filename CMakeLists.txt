@@ -65,6 +65,6 @@ set(SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_msg_io.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/generated/ros_srv_io.cpp
 )
-coppeliasim_add_plugin(simExtROS SOURCES ${SOURCES})
-add_dependencies(simExtROS generate_ros_code)
-target_link_libraries(simExtROS ${catkin_LIBRARIES})
+coppeliasim_add_plugin(simROS SOURCES ${SOURCES})
+add_dependencies(simROS generate_ros_code)
+target_link_libraries(simROS ${catkin_LIBRARIES})

@@ -46,7 +46,7 @@ void ros_imtr_callback(const sensor_msgs::ImageConstPtr& msg, SubscriberProxy *s
 class Plugin : public sim::Plugin
 {
 public:
-    void onStart()
+    void onInit()
     {
         if(!getenv("ROS_MASTER_URI"))
             throw std::runtime_error("ROS_MASTER_URI is not set");
@@ -61,7 +61,7 @@ public:
         setBuildDate(BUILD_DATE);
     }
 
-    void onEnd()
+    void onCleanup()
     {
         shutdown();
     }
@@ -118,14 +118,13 @@ public:
         }
     }
 
-    void onInstancePass(const sim::InstancePassFlags &flags, bool first)
+    void onInstancePass(const sim::InstancePassFlags &flags)
     {
         ros::spinOnce();
     }
 
     void onMainScriptAboutToBeCalled(int &out)
     {
-
         int stopSimulationRequestCounter;
         simGetInt32Param(sim_intparam_stop_request_counter, &stopSimulationRequestCounter);
         bool doNotRun = simGetBoolParam(sim_boolparam_rosinterface_donotrunmainscript);
