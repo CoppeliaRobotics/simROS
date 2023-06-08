@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <?xml-stylesheet type="text/xsl" href="callbacks.xsl"?>
 
-<plugin name="ROS" author="federico.ferri.it@gmail.com">
+<plugin name="simROS" author="federico.ferri.it@gmail.com">
     <description>This plugin provides an interface with the ROS API</description>
     <command name="subscribe">
         <description>Subscribe to a topic.</description>
