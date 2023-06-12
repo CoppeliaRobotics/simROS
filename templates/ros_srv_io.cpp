@@ -26,7 +26,7 @@ bool ros_srv_callback__`info.typespec.normalized()`(`info.typespec.ctype()`::Req
             simReleaseStack(stack); // don't throw
         std::string msg = "ros_srv_callback__`info.typespec.normalized()`: ";
         msg += ex.what();
-        sim::setLastError(proxy->serviceCallback.name, msg);
+        sim::setLastError(msg);
         return false;
     }
 }
