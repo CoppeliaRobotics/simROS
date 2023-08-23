@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16.3)
 project(sim_ros_interface)
 
 set(PKG_DEPS
@@ -67,4 +67,4 @@ set(SOURCES
 )
 coppeliasim_add_plugin(simROS SOURCES ${SOURCES})
 add_dependencies(simROS generate_ros_code)
-target_link_libraries(simROS ${catkin_LIBRARIES})
+target_link_libraries(simROS PRIVATE ${catkin_LIBRARIES})
