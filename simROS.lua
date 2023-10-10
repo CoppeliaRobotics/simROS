@@ -1,5 +1,4 @@
-local simROS=loadPlugin'simROS'
-
-(require'simROS-typecheck')(simROS)
+local simROS = loadPlugin 'simROS';
+(require 'simROS-typecheck')(simROS)
 
 return simROS
