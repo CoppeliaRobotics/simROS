@@ -18,8 +18,8 @@
             <param name="topicType" type="string">
                 <description>topic type, e.g.: 'geometry_msgs::Twist'</description>
             </param>
-            <param name="topicCallback" type="string">
-                <description>name of the callback function, which will be called with a single argument of type table containing the message payload, e.g.: {linear={x=1.5, y=0.0, z=0.0}, angular={x=0.0, y=0.0, z=-2.3}}</description>
+            <param name="topicCallback" type="func">
+                <description>callback function, which will be called with a single argument of type table containing the message payload, e.g.: {linear={x=1.5, y=0.0, z=0.0}, angular={x=0.0, y=0.0, z=-2.3}}</description>
             </param>
             <param name="queueSize" type="int" default="1">
                 <description>(optional) queue size</description>
@@ -242,8 +242,8 @@
             <param name="serviceType" type="string">
                 <description>topic type, e.g.: 'geometry_msgs::Twist'</description>
             </param>
-            <param name="serviceCallback" type="string">
-                <description>name of the callback function, which will be called with a single argument of type table containing the service request payload; it must return another table containing the response</description>
+            <param name="serviceCallback" type="func">
+                <description>callback function, which will be called with a single argument of type table containing the service request payload; it must return another table containing the response</description>
             </param>
         </params>
         <return>
@@ -331,8 +331,8 @@
             <param name="topicName" type="string">
                 <description>topic name, e.g.: '/cmd_vel'</description>
             </param>
-            <param name="topicCallback" type="string">
-                <description>name of the callback function, which will be called as: topicCallback(buffer data, int width, int height)</description>
+            <param name="topicCallback" type="func">
+                <description>callback function, which will be called as: topicCallback(buffer data, int width, int height)</description>
             </param>
             <param name="queueSize" type="int" default="1">
                 <description>(optional) queue size</description>
