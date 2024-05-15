@@ -66,9 +66,9 @@ public:
         shutdown();
     }
 
-    void onScriptStateDestroyed(int scriptID)
+    void onScriptStateAboutToBeDestroyed(int scriptHandle)
     {
-        for(auto proxy : publisherHandles.find(scriptID))
+        for(auto proxy : publisherHandles.find(scriptHandle))
         {
             if(proxy->publisher)
             {
@@ -85,7 +85,7 @@ public:
                 imageTransportShutdownPublisher(&in, &out);
             }
         }
-        for(auto proxy : subscriberHandles.find(scriptID))
+        for(auto proxy : subscriberHandles.find(scriptHandle))
         {
             if(proxy->subscriber)
             {
@@ -102,14 +102,14 @@ public:
                 imageTransportShutdownSubscriber(&in, &out);
             }
         }
-        for(auto proxy : serviceClientHandles.find(scriptID))
+        for(auto proxy : serviceClientHandles.find(scriptHandle))
         {
             shutdownServiceClient_in in;
             in.serviceClientHandle = proxy->handle;
             shutdownServiceClient_out out;
             shutdownServiceClient(&in, &out);
         }
-        for(auto proxy : serviceServerHandles.find(scriptID))
+        for(auto proxy : serviceServerHandles.find(scriptHandle))
         {
             shutdownServiceServer_in in;
             in.serviceServerHandle = proxy->handle;
