@@ -66,7 +66,7 @@ public:
         shutdown();
     }
 
-    void onScriptStateAboutToBeDestroyed(int scriptHandle)
+    void onScriptStateAboutToBeDestroyed(int scriptHandle, int scriptUid)
     {
         for(auto proxy : publisherHandles.find(scriptHandle))
         {
