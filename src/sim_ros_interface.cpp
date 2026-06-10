@@ -56,9 +56,6 @@ public:
 
         if(!registerScriptStuff())
             throw std::runtime_error("failed to register script stuff");
-
-        setExtVersion("ROS Interface Plugin");
-        setBuildDate(BUILD_DATE);
     }
 
     void onCleanup()
